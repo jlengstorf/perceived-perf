@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- <link rel="dns-prefetch" href="https://images.unsplash.com/">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+  <link rel="dns-prefetch" href="https://code.getmdl.io/">
+  <link rel="dns-prefetch" href="https://unpkg.com/">
+  <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="https://fonts.gstatic.com/s/materialicons/v36/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"> -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Prefetching Resources</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
+  <style type="text/css">
+    .photo-card.mdl-card {
+      width: 100%;
+    }
+
+    .photo-card>.mdl-card__title {
+      background-position: center;
+      background-size: cover;
+      color: #fff;
+      height: 300px;
+      position: relative;
+    }
+
+    .photo-card .mdl-card__title-text {
+      position: relative;
+      z-index: 10;
+    }
+
+    .photo-card>.mdl-card__title::before {
+      content: ' ';
+      mix-blend-mode: multiply;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 100%);
+      z-index: 1;
+    }
+
+    .photo-card>.mdl-card__title::after {
+      background-blend-mode: multiply, normal;
+      background-position: center;
+      background-size: cover;
+      content: ' ';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      transition: opacity 500ms linear;
+      transition-delay: 50ms;
+      z-index: 2;
+    }
+
+    .photo-card--loaded>.mdl-card__title::after {
+      opacity: 0;
+    }
+
+    .photo-card--bear>.mdl-card__title::after {
+      background-image: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 80px),
+      url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBggGBQkIBwgKCQkKDRYODQwMDRoTFBAWHxwhIB8cHh4jJzIqIyUvJR4eKzssLzM1ODg4ISo9QTw2QTI3ODX/2wBDAQkKCg0LDRkODhk1JB4kNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTX/wgARCAAUAB4DAREAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAABAECAwUG/8QAGgEAAgMBAQAAAAAAAAAAAAAABQYCAwQAAf/aAAwDAQACEAMQAAAAGKOyYVUw2wMPkLL9xZNeSgEt/KNqhl6pmBp1for/xAAoEAACAQMCBQMFAAAAAAAAAAABAgMABBEFEgYTITFBUWGBIzIzQnH/2gAIAQEAAT8AtrqztE5HLU7DulHck/z17VacR28MDF7Ub2JUBnHUHyKfVY5JEktIF5TKC0bEHr7+lXlqmohJI15LAYdc+a0niCwFy0ywmMb95DxYwfG41PrMR1AsNNS9KQs/tEB+3xUXFMV/ZlXhWAxJ1CDNQcQQ212XlAnhZCPtIwwNQyPz5oyxKSN1HzV1Hj8bvFu+mTG2Mqe6n1FaeBBp7hAAMEVNKxIfya//xAAdEQACAwEAAwEAAAAAAAAAAAABAwACEQQSIVEF/9oACAECAQE/AFNLL0OTsVXpytTk5LrpULYcH2dvfWjPFfsQIK0amu5OE3aWVb68o/gcbhdTsT+aVjHicViK5OmlfkpQDp2NJuw+U//EACERAAEFAAICAwEAAAAAAAAAAAMAAQIEEQUhE0ESMjRh/9oACAEDAQE/AC1oM83eSAclcj72ijPMrlF3/FSql8em6dBnGdjbE830uRAMLDmDv4qpybfeUevaPyjHx68ldi26qJZ+TNRfwuoQaA2xf//Z);
+    }
+
+    .photo-card--owl>.mdl-card__title::after {
+      background-image: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 80px),
+      url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBggGBQkIBwgKCQkKDRYODQwMDRoTFBAWHxwhIB8cHh4jJzIqIyUvJR4eKzssLzM1ODg4ISo9QTw2QTI3ODX/2wBDAQkKCg0LDRkODhk1JB4kNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTX/wgARCAAWAB4DAREAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAABQYAAgQD/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDBAAF/9oADAMBAAIQAxAAAAAYscmivAMv8pp/PYn10V0GE29bTcM5AfKv/8QAJxAAAwACAQIFBAMAAAAAAAAAAQIDBBEABRIGEyExQRRCYXFygcH/2gAIAQEAAT8A6eYZ2AZZiHIZdbRrljs+2tnnUfCYfMX6YTTHOg7L69p/R5PwfQXqiOrpMgd5md7/AI8zxTBu0mRX0dAsp0f1ynToSds2uJlYdnB7Qw0LE+5B38cCQEJ99TbyQClBQoD3AghlH2g/kE8rVO8d0XLzoZhpXO13v3H3MBzr9mfql0qCazoVJ9gQPnXwda40a5kUOR5VNsFBI9eWrmz8w3olfLpt/juIG/69DrmRKlMaNcPUk9O1Wqx0QCf9/PM/oGX1TqdamkEo4Dsdtz//xAAcEQEAAgIDAQAAAAAAAAAAAAABAAMCIRESEwT/2gAIAQIBAT8Aa9zE1OpNEfqwrtAORjWOyebMxGd3mFmieksZ/8QAHhEAAgICAgMAAAAAAAAAAAAAAAECEQMxEBITIUH/2gAIAQMBAT8At7Fb2W0d2Z8GTwJQfsx31V7LsZijGMRypHzj/9k=);
+    }
+
+    .photo-card--sunglasses>.mdl-card__title::after {
+      background-image: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 80px),
+      url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBggGBQkIBwgKCQkKDRYODQwMDRoTFBAWHxwhIB8cHh4jJzIqIyUvJR4eKzssLzM1ODg4ISo9QTw2QTI3ODX/2wBDAQkKCg0LDRkODhk1JB4kNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTX/wgARCAAUAB4DAREAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAABAIGAwUH/8QAGQEAAgMBAAAAAAAAAAAAAAAAAwUBBAYC/9oADAMBAAIQAxAAAABWS06XifAPsrhU+KqBsqnPcS142sZbANeexp9ZzV//xAArEAACAQMCBAMJAAAAAAAAAAABAwIEBREAEgYHIVFCYXETFCIxQVJywdH/2gAIAQEAAT8AQyzCDChC0z2eCJJ3atdudA7LpXNGEhior6ZJP19O2lWCjsfF9BdvfsF7NhH37htwRrmvROfcqIJchMoqORP8tQNutPDXt1r278CMo/PPfr01aBR3WE6XNUtioCQMqiLTH0PY9tX+U1ceoo5v3qpMNMoR25J/eNczJi8V1HNtchEYIjkOzGWdWWplUGFK+MWoJAK59RgnUk01jUJ22jRTFoO7YD/db51vGFSXMn8bQSAfMDXGTS29ulPwSC4+UQNf/8QAHREAAgICAwEAAAAAAAAAAAAAAQIAAwQhBRExcf/aAAgBAgEBPwBLcx7tTks2zERSvs43kbMzTrPsUb8l9aWjpx2JjUVU6QQrvoQxtwAdw+z/xAAfEQABBAIDAQEAAAAAAAAAAAABAAIDEQQSEyEyBSL/2gAIAQMBAT8AOPqNndhQxQZdhrEcCCKOmCqTrWI6TMbxb0CuGT5ncT7tNyJJ62Kk9G0/8yNooE8g7UHpZHsr/9k=);
+    }
+
+    .photo-card--love>.mdl-card__title::after {
+      background-image: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 80px),
+      url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBggGBQkIBwgKCQkKDRYODQwMDRoTFBAWHxwhIB8cHh4jJzIqIyUvJR4eKzssLzM1ODg4ISo9QTw2QTI3ODX/2wBDAQkKCg0LDRkODhk1JB4kNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTX/wgARCAAUAB4DAREAAhEBAxEB/8QAGQAAAwADAAAAAAAAAAAAAAAAAwUGAgQH/8QAGQEAAwEBAQAAAAAAAAAAAAAAAgMEAQUA/9oADAMBAAIQAxAAAAB0pi8yA+m4VPKO55Qr1dK3Kbkz41knRw9liwP/xAApEAABAwMDAgYDAQAAAAAAAAACAQMEAAURBiExEhMUIjJBQlEjcnOR/9oACAEBAAE/ANLT3nJbr1xUVQW1dMvvCcVAecvd5lXSV+RqGqvIGduv4iq+yVDhv3OY9PuMoGhJ3uibeUUv1q1S49/juEIZcjkjbil8lxzWkCt86+kK5Up8YyMu76lVNxQfbFXPTB6aiySCIk+G8qAHPcwvAYT/AHNWq2XfVIxFMwZiCiEXb5QeOhVRfKv2nNWWNHtUXwkMSQE8yKO5Vpy9SYl6hk2jfkReU52xvTV1uAMPSlnyHJMl9ep10utR59KLslaYBy2arZuLMl9XxPJKRbHlFyhVP13dmDQWvDgn86//xAAfEQACAgEEAwAAAAAAAAAAAAABAgADEhARIkETITH/2gAIAQIBAT8AyJgBA2Hce7xpggiA7co1OIh5SutE99xjlH+aDT//xAAfEQACAgEEAwAAAAAAAAAAAAABAgADEQQSIEEhIjH/2gAIAQMBAT8ACYjqCobrqaelrBk/JeFVyFMrvLNC/gL0JZq7WXYsVME7jKR78P/Z);
+    }
+
+    .photo-card--abstract>.mdl-card__title::after {
+      background-image: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 80px),
+      url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBggGBQkIBwgKCQkKDRYODQwMDRoTFBAWHxwhIB8cHh4jJzIqIyUvJR4eKzssLzM1ODg4ISo9QTw2QTI3ODX/2wBDAQkKCg0LDRkODhk1JB4kNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTX/wgARCAAUAB4DAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABQIEA//EABkBAAIDAQAAAAAAAAAAAAAAAAMEAAIFAf/aAAwDAQACEAMQAAAAycFDGiPpJRmZaddbrBZ3rHK2XqZadgo8B1v/xAAnEAACAgECBQMFAAAAAAAAAAABAgMRBAAFEhQhQVFxodETFSIxQv/aAAgBAQABPwDaIN9TD5kjGwEdKE0gKOF7lR1I9dYWU/3EnGHOxR2JJIg1Fyp4ep9zrLwMkyPEAzZDSlaY117n0HxqV5NqIm2uSaMsvA6xvR8i/fWfWZBH9VcidFFsXnLVV/zfvZ1tOdHtxpOUjABkCyhmKnsaH7OsAjJbMnzcxxI5Vai8GyTfxXcnoNbpC8WOcAKnN40to6yVcRBNA9wDWk3aYyECOBQ1WBGK1t/A0hYRQqWTrwxga3HFjlwCaCcMR6IAAbHfWDhwphQ/gpIDCyo86//EACERAAICAgEEAwAAAAAAAAAAAAECAAMEEhEQEzFBISIy/9oACAECAQE/AMk42wVPtx6llbW06EcTHsDJ2aBDWpYq48SsKPyOJkg2LqDzMe0VV6IPmWmsuXHueIWIlTnbp//EACERAAEDAwQDAAAAAAAAAAAAAAIAAQMEERIFEBMhMVGB/9oACAEDAQE/ANPoggPJVeqRW4QU9oIOU3t6VDWuDk8/xHAVrZKMAA8se0YBUyZTP0ybCYGZx8JnugFnRALN1t//2Q==);
+    }
+
+    .photo-card--graffiti>.mdl-card__title::after {
+      background-image: linear-gradient(to top, rgb(63, 81, 181) 35px, rgba(63, 81, 181, 0) 80px),
+      url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBggGBQkIBwgKCQkKDRYODQwMDRoTFBAWHxwhIB8cHh4jJzIqIyUvJR4eKzssLzM1ODg4ISo9QTw2QTI3ODX/2wBDAQkKCg0LDRkODhk1JB4kNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTX/wgARCAAXAB4DAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABQQGB//EABsBAAMAAgMAAAAAAAAAAAAAAAMEBQABAgYH/9oADAMBAAIQAxAAAACCxMeLxvX1sp1LklyOSOqiOw+vVCL5pqWkpM7K8gz/AP/EACwQAAAFAwMDAAsAAAAAAAAAAAECAwQFABESBhMhFDFBBxYiQlFSYXGBkaH/2gAIAQEAAT8AWZhpqTQ6+TNIxDg+Arcbrcw9hN8Qo8bGEPiL0eb4/WoeRQgt/pFM962WYX7VFuFXcakuqBQFT2gxDx4rVLYpNKSBlE7F2/7fitRmeM4JhyqR0O2ZIew5WqH1OZJrjMRyLlX5kljEH8+KS9KhmqBEEIlMCJ8FAVzUMw51y4bncIdLCoKApsZ3O5MHbKlplssJTrNCKGJfHLm32r1nY+I0v6LUJMsFWGZmBOTD7ha//8QAIhEAAQMDAwUAAAAAAAAAAAAAAgABAxESEwQxUSEiI2Fx/9oACAECAQE/AGOSL4sh8KYDk3RjYVFMTY3ZSv2NbuvJTq6LTXPV3UYFM/pYViflTAVd1//EACERAAEEAgICAwAAAAAAAAAAAAIAAQMEERIFMQYyExQh/9oACAEDAQE/AI7Yytge194G7TcjHn8dRnuOyrlW3b4+1UqwWgNw7ZQeKQEOZCwg4GIB1GRWbYU2wzZJQ8rK3q3aEpib3UdiQGxsv//Z);
+    }
+
+    .photo-card>.mdl-card__menu {
+      color: #fff;
+    }
+  </style>
+
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+
+<body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">#GenerateConf</span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="/index.html">Home</a>
+          <a class="mdl-navigation__link" href="/lazyload.html">Lazy Loading</a>
+          <a class="mdl-navigation__link" href="/skeleton.html">Skeleton Pattern</a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">#GenerateConf</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="/index.html">Home</a>
+        <a class="mdl-navigation__link" href="/lazyload.html">Lazy Loading</a>
+        <a class="mdl-navigation__link" href="/skeleton.html">Skeleton Pattern</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="photo-card photo-card--bear mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1508341421810-36b8fc06075b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ae31a4b53a0760596a4cdd94b3d03b95&auto=format&fit=crop&w=1400&q=80">
+                <h2 class="mdl-card__title-text">Oso</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Photo by Toa Heftiba on Unsplash
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://unsplash.com/photos/0WAJhFK7Q9o">
+                  View This Image
+                </a>
+              </div>
+              <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="photo-card photo-card--owl mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1503259901638-6bf44a4cd670?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=d5a70cffddb094508689f98924b1a094&auto=format&fit=crop&w=1400&q=80">
+                <h2 class="mdl-card__title-text">Art Park Owl</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Photo by Cris DiNoto on Unsplash
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://unsplash.com/photos/jRiWB-UafGI">
+                  View This Image
+                </a>
+              </div>
+              <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="photo-card photo-card--sunglasses mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1453814235491-3cfac3999928?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f05da4077424625439e156f87d204797&auto=format&fit=crop&w=1400&q=80">
+                <h2 class="mdl-card__title-text">Sunglasses</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Photo by Alex Holyoake on Unsplash
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://unsplash.com/photos/qX9Ie7ieb1E">
+                  View This Image
+                </a>
+              </div>
+              <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="photo-card photo-card--love mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1503416858304-41dc04946371?ixlib=rb-0.3.5&s=8133b8ba919c0e986549f1e77685935a&auto=format&fit=crop&w=1400&q=80">
+                <h2 class="mdl-card__title-text">Love Is Color</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Photo by Chris Barbalis on Unsplash
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://unsplash.com/photos/FZ65n5sAsaY">
+                  View This Image
+                </a>
+              </div>
+              <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="photo-card photo-card--abstract mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1505868900972-a7ed025e680b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=b3e5e30418db88c9f6a8952c6238db9b&auto=format&fit=crop&w=1400&q=80">
+                <h2 class="mdl-card__title-text">Abstract</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Photo by Glen . on Unsplash
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://unsplash.com/photos/FqnkBeq1wGg">
+                  View This Image
+                </a>
+              </div>
+              <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="photo-card photo-card--graffiti mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1507123088351-58f09404d43a?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ad718131ca1e0f88ca82329c00137d3d&auto=format&fit=crop&w=1400&q=80">
+                <h2 class="mdl-card__title-text">Graffiti</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Photo by Tools For Motivation on Unsplash
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://unsplash.com/photos/dcSLXvvaLXM">
+                  View This Image
+                </a>
+              </div>
+              <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="text/javascript">
+    const updateCardBackground = card => {
+      if (card.classList.contains('photo-card--loaded')) {
+        return; // Do nothing if the photo is already loaded.
+      }
+
+      const title = card.querySelector('.mdl-card__title');
+      title.style.backgroundImage = `url(${title.dataset.backgroundImage})`;
+      card.classList.add('photo-card--loaded');
+    }
+
+    const createPreloadLink = (href, listener) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = href;
+      link.addEventListener('load', listener);
+
+      document.head.appendChild(link);
+    }
+
+    const handler = entries => {
+      entries.forEach(entry => {
+        // Only load images if a card is on-screen.
+        if (entry.isIntersecting) {
+          updateCardBackground(entry.target);
+        }
+      });
+    };
+
+    // Load any image that’s more than 25% visible on screen.
+    const observer = new IntersectionObserver(handler, { threshold: 0.25 });
+
+    // Find all cards and add lazy loading to each one.
+    const cards = document.querySelectorAll('.photo-card');
+    cards.forEach(card => {
+      const title = card.querySelector('.mdl-card__title');
+      const observeCard = () => observer.observe(card);
+      createPreloadLink(title.dataset.backgroundImage, observeCard);
+    });
+  </script>
+</body>
+
+</html>
