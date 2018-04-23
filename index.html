@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Perceived Perforamance Workshop @ #GenerateConf</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <style type="text/css">
+    .mdl-card {
+      width: 100%;
+    }
+
+    .mdl-card__title {
+      background-color: #3f51b5;
+      color: #fff;
+      height: 75px;
+    }
+  </style>
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+
+<body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">#GenerateConf</span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="/index.html">Home</a>
+          <a class="mdl-navigation__link" href="/lazyload.html">Lazy Loading</a>
+          <a class="mdl-navigation__link" href="/skeleton.html">Skeleton Pattern</a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">#GenerateConf</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="/index.html">Home</a>
+        <a class="mdl-navigation__link" href="/lazyload.html">Lazy Loading</a>
+        <a class="mdl-navigation__link" href="/skeleton.html">Skeleton Pattern</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">Lazy Loading</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                <p>
+                  Speed up pages by loading large assets later in a way that doesn’t look terrible.
+                </p>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/lazyload.html">
+                  Let’s Do It
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--6-col">
+            <div class="mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">Skeleton Loaders</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                <p>Show an explorable UI, even before any data is loaded.</p>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/skeleton.html">
+                  Let’s Do It
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="text/javascript">
+    const updateCardBackground = card => {
+      if (card.classList.contains('photo-card--loaded')) {
+        return; // Do nothing if the photo is already loaded.
+      }
+
+      const title = card.querySelector('.mdl-card__title');
+      title.style.backgroundImage = `url(${title.dataset.backgroundImage})`;
+      card.classList.add('photo-card--loaded');
+    }
+
+    const createPreloadLink = (href, listener) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = href;
+      link.addEventListener('load', listener);
+
+      document.head.appendChild(link);
+    }
+
+    const handler = entries => {
+      entries.forEach(entry => {
+        // Only load images if a card is on-screen.
+        if (entry.isIntersecting) {
+          updateCardBackground(entry.target);
+        }
+      });
+    };
+
+    // Load any image that’s more than 25% visible on screen.
+    const observer = new IntersectionObserver(handler, { threshold: 0.25 });
+
+    // Find all cards and add lazy loading to each one.
+    const cards = document.querySelectorAll('.photo-card');
+    cards.forEach(card => {
+      const title = card.querySelector('.mdl-card__title');
+      const observeCard = () => observer.observe(card);
+      createPreloadLink(title.dataset.backgroundImage, observeCard);
+    });
+  </script>
+</body>
+
+</html>
