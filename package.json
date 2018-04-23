@@ -1,0 +1,15 @@
+{
+  "name": "perceived-perf",
+  "version": "1.0.0",
+  "description": "Workshop code.",
+  "main": "index.js",
+  "repository": "https://github.com/jlengstorf/perceived-perf.git",
+  "author": "Jason Lengstorf <jason@lengstorf.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  },
+  "scripts": {
+    "develop": "http-server"
+  }
+}
