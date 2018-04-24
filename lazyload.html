@@ -237,10 +237,20 @@
       document.head.appendChild(link);
     };
 
+    const updateCardBackground = card => {
+      if (card.classList.contains('photo-card--loaded')) {
+        return; // Do nothing if the photo is already loaded
+      }
+
+      const title = card.querySelector('.mdl-card__title');
+      title.style.backgroundImage = `url(${title.dataset.backgroundImage})`;
+      card.classList.add('photo-card--loaded');
+    };
+
     const handler = entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
-          console.log(`${entry.target.classList} is visible!`);
+          updateCardBackground(entry.target);
         }
       });
     };
