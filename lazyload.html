@@ -129,7 +129,7 @@
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--6-col">
             <div class="photo-card photo-card--bear mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1508341421810-36b8fc06075b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ae31a4b53a0760596a4cdd94b3d03b95&auto=format&fit=crop&w=1400&q=80">
                 <h2 class="mdl-card__title-text">Oso</h2>
               </div>
               <div class="mdl-card__supporting-text">
@@ -144,7 +144,7 @@
           </div>
           <div class="mdl-cell mdl-cell--6-col">
             <div class="photo-card photo-card--owl mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1503259901638-6bf44a4cd670?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=d5a70cffddb094508689f98924b1a094&auto=format&fit=crop&w=1400&q=80">
                 <h2 class="mdl-card__title-text">Art Park Owl</h2>
               </div>
               <div class="mdl-card__supporting-text">
@@ -159,7 +159,7 @@
           </div>
           <div class="mdl-cell mdl-cell--6-col">
             <div class="photo-card photo-card--sunglasses mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1453814235491-3cfac3999928?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f05da4077424625439e156f87d204797&auto=format&fit=crop&w=1400&q=80">
                 <h2 class="mdl-card__title-text">Sunglasses</h2>
               </div>
               <div class="mdl-card__supporting-text">
@@ -179,7 +179,7 @@
           </div>
           <div class="mdl-cell mdl-cell--6-col">
             <div class="photo-card photo-card--love mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1503416858304-41dc04946371?ixlib=rb-0.3.5&s=8133b8ba919c0e986549f1e77685935a&auto=format&fit=crop&w=1400&q=80">
                 <h2 class="mdl-card__title-text">Love Is Color</h2>
               </div>
               <div class="mdl-card__supporting-text">
@@ -194,7 +194,7 @@
           </div>
           <div class="mdl-cell mdl-cell--6-col">
             <div class="photo-card photo-card--abstract mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1505868900972-a7ed025e680b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=b3e5e30418db88c9f6a8952c6238db9b&auto=format&fit=crop&w=1400&q=80">
                 <h2 class="mdl-card__title-text">Abstract</h2>
               </div>
               <div class="mdl-card__supporting-text">
@@ -209,7 +209,7 @@
           </div>
           <div class="mdl-cell mdl-cell--6-col">
             <div class="photo-card photo-card--graffiti mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
+              <div class="mdl-card__title" data-background-image="https://images.unsplash.com/photo-1507123088351-58f09404d43a?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ad718131ca1e0f88ca82329c00137d3d&auto=format&fit=crop&w=1400&q=80">
                 <h2 class="mdl-card__title-text">Graffiti</h2>
               </div>
               <div class="mdl-card__supporting-text">
@@ -228,6 +228,15 @@
   </div>
 
   <script type="text/javascript">
+    const createPreloadLink = href => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = href;
+
+      document.head.appendChild(link);
+    };
+
     const handler = entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
@@ -240,7 +249,9 @@
 
     const cards = document.querySelectorAll('.photo-card');
     cards.forEach(card => {
+      const title = card.querySelector('.mdl-card__title');
       observer.observe(card);
+      createPreloadLink(title.dataset.backgroundImage);
     });
   </script>
 </body>
