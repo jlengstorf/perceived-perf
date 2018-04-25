@@ -15,3 +15,13 @@ self.addEventListener('install', event => {
       )
   );
 });
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches
+      // Check for cached data.
+      .match(event.request)
+      // If cached data is found, return it; otherwise fetch as usual.
+      .then(data => data || fetch(event.request))
+  );
+});
