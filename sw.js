@@ -16,12 +16,20 @@ self.addEventListener('install', event => {
   );
 });
 
+const fetchAndCache = request =>
+  caches.open(CACHE_VERSION).then(cache =>
+    fetch(request).then(response => {
+      cache.put(request, response.clone());
+      return response;
+    })
+  );
+
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches
       // Check for cached data.
       .match(event.request)
       // If cached data is found, return it; otherwise fetch as usual.
-      .then(data => data || fetch(event.request))
+      .then(data => data || fetchAndCache(event.request))
   );
 });
