@@ -120,23 +120,17 @@
     // Choose 6 characters from Rick & Morty to display.
     const characters = [1, 2, 3, 4, 5, 265];
 
-    // Send a fetch for each character and store all returned Promises.
-    const promises = characters.map(character =>
-      fetch(`https://rickandmortyapi.com/api/character/${character}`)
-        .then(response => response.json())
-    );
+    // Send a request for each character.
+    characters.forEach(async (character, index) => {
+      const response = await fetch(`https://rickandmortyapi.com/api/character/${character}`)
+      const data = await response.json();
+      const card = characterCards[index];
+      const title = card.querySelector('.mdl-card__title');
+      const img = card.querySelector('.character__avatar');
 
-    // When all requests are complete, show the data.
-    Promise.all(promises).then(dataArr => {
-      dataArr.forEach((data, index) => {
-        const card = characterCards[index];
-        const title = card.querySelector('.mdl-card__title');
-        const img = card.querySelector('.character__avatar');
-
-        title.textContent = data.name;
-        img.src = data.image;
-        img.alt = data.name;
-      });
+      title.textContent = data.name;
+      img.src = data.image;
+      img.alt = data.name;
     });
   </script>
 </body>
