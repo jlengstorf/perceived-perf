@@ -31,5 +31,13 @@ self.addEventListener('fetch', event => {
       .match(event.request)
       // If cached data is found, return it; otherwise fetch as usual.
       .then(data => data || fetchAndCache(event.request))
+      .catch(() => {
+        const url = new URL(event.request.url);
+
+        // Show the offline page for failed page requests.
+        if (url.pathname.match(/\.html$/)) {
+          return caches.match(OFFLINE_PAGE);
+        }
+      })
   );
 });
