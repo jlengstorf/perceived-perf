@@ -25,6 +25,7 @@
       border-radius: 2px;
       content: ' ';
       display: block;
+      animation: loading 2s linear 0ms infinite forwards;
     }
 
     .character--loading .mdl-card__title-text:empty::after {
@@ -38,8 +39,50 @@
       width: 100%;
     }
 
+    .mdl-cell:nth-child(1) :empty::after,
+    .mdl-cell:nth-child(1) ::after {
+      animation-delay: 100ms;
+    }
+
+    .mdl-cell:nth-child(2) :empty::after,
+    .mdl-cell:nth-child(2) ::after {
+      animation-delay: 200ms;
+    }
+
+    .mdl-cell:nth-child(3) :empty::after,
+    .mdl-cell:nth-child(3) ::after {
+      animation-delay: 300ms;
+    }
+
+    .mdl-cell:nth-child(4) :empty::after,
+    .mdl-cell:nth-child(4) ::after {
+      animation-delay: 400ms;
+    }
+
+    .mdl-cell:nth-child(5) :empty::after,
+    .mdl-cell:nth-child(5) ::after {
+      animation-delay: 500ms;
+    }
+
+    .mdl-cell:nth-child(6) :empty::after,
+    .mdl-cell:nth-child(6) ::after {
+      animation-delay: 600ms;
+    }
+
     .character--loading .mdl-card__supporting-text img {
       display: none;
+    }
+
+    @keyframes loading {
+      40% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      60% {
+        opacity: 1;
+      }
     }
   </style>
   <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
