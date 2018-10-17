@@ -222,11 +222,13 @@
   </div>
 
   <script type="text/javascript">
-    const createPreloadLink = href => {
+    const createPreloadLink = (href, listener) => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
       link.href = href;
+      link.addEventListener('load', listener);
+
       document.head.appendChild(link);
     };
 
@@ -250,8 +252,8 @@
     const cards = document.querySelectorAll('.photo-card');
     cards.forEach(card => {
       const title = card.querySelector('.mdl-card__title');
-      observer.observe(card);
-      createPreloadLink(title.dataset.backgroundImage);
+      const observeCard = () => observer.observe(card);
+      createPreloadLink(title.dataset.backgroundImage, observeCard);
     });
   </script>
 </body>
