@@ -220,6 +220,21 @@
       </div>
     </main>
   </div>
+
+  <script type="text/javascript">
+    const handler = entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+          console.log(`${entry.target.classList} is visible!`);
+        }
+      });
+    };
+    const observer = new IntersectionObserver(handler, { threshold: 0.25 });
+    const cards = document.querySelectorAll('.photo-card');
+    cards.forEach(card => {
+      observer.observe(card);
+    });
+  </script>
 </body>
 
 </html>
