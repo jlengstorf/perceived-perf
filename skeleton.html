@@ -199,6 +199,10 @@
       title.textContent = data.name;
       img.src = data.image;
       img.alt = data.name;
+
+      img.addEventListener('load', () => {
+        card.classList.remove('character--loading');
+      });
     });
   </script>
 </body>
